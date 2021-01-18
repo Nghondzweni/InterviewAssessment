@@ -33,6 +33,11 @@ app.get('/', async (req, res)  => {
   res.send(result);
 })
 
+app.get('/raw', async (req, res)  => {
+  const result = await student_data_controller.getStudentData();
+  res.send(result);
+})
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
