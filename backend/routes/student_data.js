@@ -12,7 +12,8 @@ module.exports.getStudentData = async function () {
                 return({
                     success : false,
                     code : 503,
-                    message : "There was a problem retrieving student data. Please try again"
+                    message : "There was a problem retrieving student data. Please try again",
+                    data : "There was a problem retrieving student data. Please try again"
                 })
             } else {
                 return({

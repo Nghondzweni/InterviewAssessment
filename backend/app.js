@@ -34,7 +34,7 @@ app.get('/', async (req, res)  => {
 
 app.get('/raw', async (req, res)  => {
   const result = await student_data_controller.getStudentData();
-  res.send(result);
+  res.send(result.data);
 })
 
 
