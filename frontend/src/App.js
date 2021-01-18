@@ -4,6 +4,20 @@ import axios from 'axios';
 import { Component } from 'react';
 import  Loading  from './Loading';
 import './table.scss'
+
+// function App() {
+//   axios.get('http://localhost:3000/student').then((response) => {
+//     console.log(response);
+//   });
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+        
+//       </header>
+//     </div>
+//   );
+// }
+
 class App extends Component {
   constructor() {
     super();
@@ -11,6 +25,8 @@ class App extends Component {
     this.state = {
         isLoading : true,
         studentData : [],
+        sortby : "student_id",
+        direction : "asc",
         error : false
     }
   }
@@ -21,7 +37,6 @@ class App extends Component {
     })
 
     axios.get('http://localhost:3000/').then((response) => {
-      console.log(response)
       if(response.data.success === true){
         this.setState({
           studentData : response.data.data,
@@ -33,17 +48,37 @@ class App extends Component {
           isLoading : false
         })
       }
+    })
+    .catch(error => {
+      this.setState({
+        error : true,
+        isLoading : false
+      })
     });
-
   }
 
-  render () {
+  handleSortChange = (e) => {
+    this.setState({
+      sortby : e.target.value
+    })
+  }
+
+  handleDirectionChange = (e) => {
+    this.setState({
+      direction : e.target.value
+    })
+  }
+
+
+  render() {
     var {
       isLoading,
       studentData,
-      error
+      sortby,
+      error,
+      direction
     } = this.state;
-
+    
     if(isLoading){
       return (
         <div className="pageContainer">
@@ -62,9 +97,38 @@ class App extends Component {
         </div>
       )
     }
-    else{
-    return(
-    <div class="container">
+    else {
+      if(sortby === "student_id"){
+        if(direction === "asc")
+          studentData.sort((a, b) => (a.student_id > b.student_id) ? 1 : -1)
+        else
+          studentData.sort((a, b) => (a.student_id > b.student_id) ? -1 : 1)
+
+      }
+      else if(sortby === "name"){
+        if(direction === "asc")
+          studentData.sort((a, b) => (a.name > b.name) ? 1 : -1)
+        else
+          studentData.sort((a, b) => (a.name > b.name) ? -1 : 1)
+
+      }
+      else if(sortby === "university"){
+        if(direction === "asc")
+          studentData.sort((a, b) => (a.university > b.university) ? 1 : -1)
+        else
+          studentData.sort((a, b) => (a.university > b.university) ? -1 : 1)
+
+      }
+      else if(sortby === "mark"){
+        if(direction === "asc")
+          studentData.sort((a, b) => (a.mark > b.mark) ? 1 : -1)
+        else
+          studentData.sort((a, b) => (a.mark > b.mark) ? -1 : 1)
+
+      }
+
+      return(
+        <div class="container">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h1>Registree Interview Assessment</h1>
@@ -94,11 +158,32 @@ class App extends Component {
             </div>
           </div>
           <div>
+            Sort By :     
+          <select 
+                value={this.state.sortby} 
+                onChange={this.handleSortChange} 
+              >
+              <option value="student_id">StudentID</option>
+                <option value="name">Name</option>
+                <option value="university">University</option>
+                <option value="mark">Mark</option>
+          </select>
+          </div>
+          <div>
+            Direction :     
+          <select 
+                value={this.state.direction} 
+                onChange={this.handleDirectionChange} 
+              >
+              <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+
+          </select>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
-}
 }
 
 export default App;
